@@ -55,14 +55,26 @@ public class MainActivity extends Activity {
     public void parseJSON(String jstring) {
         if (jstring != null) {
             try {
-                JSONArray json = new JSONArray(jstring);
+                JSONArray jsonArr = new JSONArray(jstring);
 
-
-                // looping through All Contacts
-                for (int i = 0; i < json.length(); i++) {
-                    JSONObject c = json.getJSONObject(i);
+                // optstring will return empty if json object is not present
+                for (int i = 0; i < jsonArr.length(); i++) {
+                    JSONObject c = jsonArr.getJSONObject(i);
 
                     String name = c.getString("name");
+                    int empId = c.getInt("employeeId"); // empId and name left with getString rather than optString since they are mandatory
+                    String detailsURL = c.optString("detailsURL");
+                    String company = c.optString("company");
+                    String smallImg = c.optString("smallImageURL");
+                    String bday = c.optString("birthdate");
+
+                    JSONObject phone = c.getJSONObject("phone"); // json within json
+                    String phoneWork = phone.optString("work");
+                    String phoneHome = phone.optString("home");
+                    String phoneMobile = phone.optString("mobile");
+
+
+
 
                     // tmp hashmap for single contact
                     //HashMap<String, String> contact = new HashMap<String, String>();
@@ -71,7 +83,7 @@ public class MainActivity extends Activity {
 
                     //contact.put("name", name);
 
-                    Log.d("OUTPUT", name);
+                    Log.d("OUTPUT", name + "/" + phoneWork);
 
                     // adding contact to contact list
                     //contactList.add(contact);
