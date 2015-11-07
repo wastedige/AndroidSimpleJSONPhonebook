@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,6 +27,7 @@ import java.io.InputStreamReader;
 
 
 public class MainActivity extends Activity {
+    // if encountering java.net.UnknownHostException while the address is actually reachable, try restarting wifi/computer. It's a known issue.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,31 +39,39 @@ public class MainActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
         //myText.setText
         String readJSON = getJSON("http://solstice.applauncher.com/external/contacts.json") ;
+        myText.setText(readJSON);
+
+
         try{
             JSONObject jsonObject = new JSONObject(readJSON);
-            Log.i(MainActivity.class.getName(), jsonObject.getString("date"));
+            Log.i(MainActivity.class.getName(), jsonObject.getString("name"));
         } catch(Exception e){e.printStackTrace();}
         finally{System.out.println("Success");}
 
+        // myText.setText(readJSON);
 
     }
 
     public String getJSON(String address){
-        StringBuilder builder = new StringBuilder();
+        // StringBuilder builder = new StringBuilder();
+        String builder = "";
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(address);
-        try{
+        try {
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if(statusCode == 200){
                 HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
+                //InputStream content = entity.getContent();
+                builder = EntityUtils.toString(entity);
+                /*
                 BufferedReader reader = new BufferedReader(new InputStreamReader(content));
                 String line;
                 while((line = reader.readLine()) != null){
                     builder.append(line);
                 }
+                */
             } else {
                 Log.e(MainActivity.class.toString(),"Failed to get JSON object");
             }
