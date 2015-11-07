@@ -38,6 +38,16 @@ public class MainActivity extends Activity {
     JSONArray contacts = null;
     ArrayList<HashMap<String, String>> contactList;
 
+    private static final String TAG_NAME = "name";
+    private static final String TAG_EMPLOYEE_ID = "employeeId";
+    private static final String TAG_DETAILS = "detailsURL";
+    private static final String TAG_COMPANY = "company";
+    private static final String TAG_IMAGE = "smallImageURL";
+    private static final String TAG_BIRTHDATE = "birthdate";
+    private static final String TAG_WORKPHONE = "work";
+    private static final String TAG_HOMEPHONE = "home";
+    private static final String TAG_MOBILEPHONE = "mobile";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,29 +71,35 @@ public class MainActivity extends Activity {
                 for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject c = jsonArr.getJSONObject(i);
 
-                    String name = c.getString("name");
-                    int empId = c.getInt("employeeId"); // empId and name left with getString rather than optString since they are mandatory
-                    String detailsURL = c.optString("detailsURL");
-                    String company = c.optString("company");
-                    String smallImg = c.optString("smallImageURL");
-                    String bday = c.optString("birthdate");
+                    String name = c.getString(TAG_NAME);
+                    String empId = c.getString(TAG_EMPLOYEE_ID); // empId and name left with getString rather than optString since they are mandatory
+                    String detailsURL = c.optString(TAG_DETAILS);
+                    String company = c.optString(TAG_COMPANY);
+                    String smallImg = c.optString(TAG_IMAGE);
+                    String bday = c.optString(TAG_BIRTHDATE);
 
                     JSONObject phone = c.getJSONObject("phone"); // json within json
-                    String phoneWork = phone.optString("work");
-                    String phoneHome = phone.optString("home");
-                    String phoneMobile = phone.optString("mobile");
+                    String phoneWork = phone.optString(TAG_WORKPHONE);
+                    String phoneHome = phone.optString(TAG_HOMEPHONE);
+                    String phoneMobile = phone.optString(TAG_MOBILEPHONE);
 
+                    // temporary hashmap for single contact
+                    HashMap<String, String> contact = new HashMap<String, String>();
 
-
-
-                    // tmp hashmap for single contact
-                    //HashMap<String, String> contact = new HashMap<String, String>();
-
+                    contact.put(TAG_EMPLOYEE_ID, empId);
+                    contact.put(TAG_NAME, name);
+                    contact.put(TAG_DETAILS, detailsURL);
+                    contact.put(TAG_COMPANY, company);
+                    contact.put(TAG_IMAGE, smallImg);
+                    contact.put(TAG_BIRTHDATE, bday);
+                    contact.put(TAG_WORKPHONE, phoneWork);
+                    contact.put(TAG_HOMEPHONE, phoneHome);
+                    contact.put(TAG_MOBILEPHONE, phoneMobile);
                     // adding each child node to HashMap key => value
 
                     //contact.put("name", name);
 
-                    Log.d("OUTPUT", name + "/" + phoneWork);
+                    Log.d("OUTPUT", name + " / " + empId);
 
                     // adding contact to contact list
                     //contactList.add(contact);
