@@ -1,6 +1,7 @@
 package com.example.shaahinshahbazi.phoneb2;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -18,16 +19,24 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainActivity extends Activity {
     // if encountering java.net.UnknownHostException while the address is actually reachable, try restarting wifi/computer. It's a known issue.
+    // http://www.androidhive.info/2012/01/android-json-parsing-tutorial/
+
+    JSONArray contacts = null;
+    ArrayList<HashMap<String, String>> contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +46,44 @@ public class MainActivity extends Activity {
         // https://dylansegna.wordpress.com/2013/09/19/using-http-requests-to-get-json-objects-in-android/
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        //myText.setText
         String readJSON = getJSON("http://solstice.applauncher.com/external/contacts.json") ;
-        myText.setText(readJSON);
+        //myText.setText(readJSON);
+        parseJSON(readJSON);
+
+    }
+
+    public void parseJSON(String jstring) {
+        if (jstring != null) {
+            try {
+                JSONArray json = new JSONArray(jstring);
 
 
-        try{
-            JSONObject jsonObject = new JSONObject(readJSON);
-            Log.i(MainActivity.class.getName(), jsonObject.getString("name"));
-        } catch(Exception e){e.printStackTrace();}
-        finally{System.out.println("Success");}
+                // looping through All Contacts
+                for (int i = 0; i < json.length(); i++) {
+                    JSONObject c = json.getJSONObject(i);
 
-        // myText.setText(readJSON);
+                    String name = c.getString("name");
 
+                    // tmp hashmap for single contact
+                    //HashMap<String, String> contact = new HashMap<String, String>();
+
+                    // adding each child node to HashMap key => value
+
+                    //contact.put("name", name);
+
+                    Log.d("OUTPUT", name);
+
+                    // adding contact to contact list
+                    //contactList.add(contact);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("ServiceHandler", "Couldn't get any data from the url");
+        }
+
+        return;
     }
 
     public String getJSON(String address){
@@ -63,24 +97,18 @@ public class MainActivity extends Activity {
             int statusCode = statusLine.getStatusCode();
             if(statusCode == 200){
                 HttpEntity entity = response.getEntity();
-                //InputStream content = entity.getContent();
+
                 builder = EntityUtils.toString(entity);
-                /*
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
-                while((line = reader.readLine()) != null){
-                    builder.append(line);
-                }
-                */
+
             } else {
                 Log.e(MainActivity.class.toString(),"Failed to get JSON object");
             }
-        }catch(ClientProtocolException e){
+        } catch(ClientProtocolException e){
             e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
         }
-        return builder.toString();
+        return builder;
     }
 
     @Override
