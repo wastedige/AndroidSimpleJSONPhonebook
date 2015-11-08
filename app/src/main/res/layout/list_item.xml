@@ -30,7 +30,7 @@ android:paddingRight="10dp" >
 
         <!-- Mobile number label -->
         <TextView
-            android:id="@+id/mobile"
+            android:id="@+id/workphone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#5d5d5d"

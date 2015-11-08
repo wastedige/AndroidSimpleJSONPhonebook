@@ -64,7 +64,7 @@ public class MainActivity extends ListActivity {
 
         parseJSON(readJSON);
 
-        setListAdapter(new PhonelistAdapter(this, namesList, imagesList));
+        setListAdapter(new PhonelistAdapter(this, returnArrayList(TAG_NAME), returnArrayList(TAG_WORKPHONE), returnArrayList(TAG_IMAGE)));
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -81,12 +81,10 @@ public class MainActivity extends ListActivity {
         });
     }
 
-    public void parseJSON(String jstring) {
+    private void parseJSON(String jstring) {
         if (jstring != null) {
             try {
                 JSONArray jsonArr = new JSONArray(jstring);
-                String [] namesListtemp = new String [jsonArr.length()];
-                String [] imagesListtemp = new String [jsonArr.length()];;
 
                 // optstring will return empty if json object is not present
                 for (int i = 0; i < jsonArr.length(); i++) {
@@ -117,17 +115,11 @@ public class MainActivity extends ListActivity {
                     contact.put(TAG_HOMEPHONE, phoneHome);
                     contact.put(TAG_MOBILEPHONE, phoneMobile);
 
-                    namesListtemp[i] = name;
-                    imagesListtemp[i] = smallImg;
-
-                    Log.d("OUTPUT", name + " / " + empId);
+                    // Log.d("OUTPUT", name + " / " + empId);
 
                     // adding contact to contact list
                     contactList.add(contact);
                 }
-
-                namesList = namesListtemp;
-                imagesList = imagesListtemp;
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -139,7 +131,15 @@ public class MainActivity extends ListActivity {
         return;
     }
 
-    public String getJSON(String address){
+    private String [] returnArrayList(String tag) {
+        String [] tmp = new String [contactList.size()];
+        for (int i = 0; i < contactList.size(); i++) {
+            tmp[i] = contactList.get(i).get(tag);
+        }
+        return tmp;
+    }
+
+    private String getJSON(String address){
         // StringBuilder builder = new StringBuilder();
         String builder = "";
         HttpClient client = new DefaultHttpClient();
