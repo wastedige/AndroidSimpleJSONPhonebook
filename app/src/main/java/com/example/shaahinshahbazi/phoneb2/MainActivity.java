@@ -71,11 +71,11 @@ public class MainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // Toast.makeText(MainActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, contactList.get(position).get(TAG_DETAILS), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), DetailedActivity.class);
-                i.putExtra("name", "productz");
-                i.putExtra("employeeID", "productz");
-                i.putExtra("company", "productz");
+                i.putExtra("json", contactList.get(position).get(TAG_DETAILS));
+                i.putExtra("name", contactList.get(position).get(TAG_NAME));
+                i.putExtra("company", contactList.get(position).get(TAG_COMPANY));
                 startActivity(i);
             }
         });
