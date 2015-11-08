@@ -3,23 +3,55 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
+    android:id="@+id/layout"
     >
 
     <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/img"
-        android:paddingRight="10dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+        <ImageView
+            android:background="@android:color/darker_gray"
+            android:id="@+id/img"
+            android:padding="10dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"/>
 
-    <TextView android:id="@+id/name"  android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView android:id="@+id/employeeID"  android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView android:id="@+id/company"  android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:paddingLeft="15dp">
+
+                 <TextView android:text="Name:" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+                <TextView android:id="@+id/name"  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:paddingBottom="10dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView android:text="Company:" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+                <TextView android:id="@+id/company"  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent" android:paddingTop="20dp">
+
+        <TextView android:text="Email:" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView android:id="@+id/email"  android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/black" />
+        <TextView android:text="Website:" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView android:id="@+id/website"  android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 
