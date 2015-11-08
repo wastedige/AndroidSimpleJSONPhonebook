@@ -33,7 +33,7 @@ public class DetailedActivity extends Activity{
         name.setText(i.getStringExtra("name"));
         company.setText(i.getStringExtra("company"));
 
-        String readJSON = jsonHandler.getJSON(jsonDetailedAddress);
+        String readJSON = jsonHandler.getJsonDetailed(jsonDetailedAddress);
         String [] detailedContent = jsonHandler.parseJsonDetailed(readJSON);
 
         // using parsed JSON data
