@@ -25,6 +25,7 @@ public class DetailedActivity extends Activity{
         TextView company = (TextView) findViewById(R.id.company);
         TextView email = (TextView) findViewById(R.id.email);
         TextView website = (TextView) findViewById(R.id.website);
+        ImageView star = (ImageView) findViewById(R.id.star);
 
         Intent i = getIntent();
         // getting attached intent data
@@ -36,6 +37,10 @@ public class DetailedActivity extends Activity{
         String [] detailedContent = jsonHandler.parseJsonDetailed(readJSON);
 
         // using parsed JSON data
+        if (detailedContent[0] == "false") {
+            star.setVisibility(View.INVISIBLE);
+        }
+
         new DownloadImageTask((ImageView) findViewById(R.id.img))
                 .execute(detailedContent[1]);
 
