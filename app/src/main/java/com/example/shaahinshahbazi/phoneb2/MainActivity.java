@@ -2,6 +2,8 @@ package com.example.shaahinshahbazi.phoneb2;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -30,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,6 +43,8 @@ public class MainActivity extends ListActivity {
 
     JSONArray contacts = null;
     ArrayList<HashMap<String, String>> contactList;
+    String [] namesList;
+    String [] imagesList;
 
     private static final String TAG_NAME = "name";
     private static final String TAG_EMPLOYEE_ID = "employeeId";
@@ -58,6 +63,8 @@ public class MainActivity extends ListActivity {
         ListView lv = getListView();
         contactList = new ArrayList<HashMap<String, String>>();
 
+
+
         // https://dylansegna.wordpress.com/2013/09/19/using-http-requests-to-get-json-objects-in-android/
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -65,20 +72,26 @@ public class MainActivity extends ListActivity {
         String readJSON = getJSON("http://solstice.applauncher.com/external/contacts.json") ;
 
         parseJSON(readJSON);
-        ListAdapter adapter = new SimpleAdapter(
+
+        /*
+        SimpleAdapter adapter = new SimpleAdapter(
                 MainActivity.this, contactList,
-                R.layout.list_item, new String[] { TAG_NAME, TAG_HOMEPHONE,
-                TAG_MOBILEPHONE }, new int[] { R.id.name,
-                R.id.email, R.id.mobile });
+                R.layout.list_item, new String[] { TAG_NAME,
+                TAG_MOBILEPHONE }, new int[] { R.id.name, R.id.mobile });
 
+        adapter.setViewImage(R.id.img, TAG_IMAGE );
         setListAdapter(adapter);
+        */
 
+        setListAdapter(new PhonelistAdapter(this, namesList, imagesList));
     }
 
     public void parseJSON(String jstring) {
         if (jstring != null) {
             try {
                 JSONArray jsonArr = new JSONArray(jstring);
+                String [] namesListtemp = new String [jsonArr.length()];
+                String [] imagesListtemp = new String [jsonArr.length()];;
 
                 // optstring will return empty if json object is not present
                 for (int i = 0; i < jsonArr.length(); i++) {
@@ -108,15 +121,19 @@ public class MainActivity extends ListActivity {
                     contact.put(TAG_WORKPHONE, phoneWork);
                     contact.put(TAG_HOMEPHONE, phoneHome);
                     contact.put(TAG_MOBILEPHONE, phoneMobile);
-                    // adding each child node to HashMap key => value
 
-                    //contact.put("name", name);
+                    namesListtemp[i] = name;
+                    imagesListtemp[i] = smallImg;
 
                     Log.d("OUTPUT", name + " / " + empId);
 
                     // adding contact to contact list
                     contactList.add(contact);
                 }
+
+                namesList = namesListtemp;
+                imagesList = imagesListtemp;
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
