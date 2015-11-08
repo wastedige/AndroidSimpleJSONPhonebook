@@ -7,6 +7,9 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
@@ -31,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
     // if encountering java.net.UnknownHostException while the address is actually reachable, try restarting wifi/computer. It's a known issue.
     // http://www.androidhive.info/2012/01/android-json-parsing-tutorial/
 
@@ -52,13 +55,23 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView myText = (TextView) findViewById(R.id.myText);
+        ListView lv = getListView();
+        contactList = new ArrayList<HashMap<String, String>>();
+
         // https://dylansegna.wordpress.com/2013/09/19/using-http-requests-to-get-json-objects-in-android/
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
         String readJSON = getJSON("http://solstice.applauncher.com/external/contacts.json") ;
-        //myText.setText(readJSON);
+
         parseJSON(readJSON);
+        ListAdapter adapter = new SimpleAdapter(
+                MainActivity.this, contactList,
+                R.layout.list_item, new String[] { TAG_NAME, TAG_HOMEPHONE,
+                TAG_MOBILEPHONE }, new int[] { R.id.name,
+                R.id.email, R.id.mobile });
+
+        setListAdapter(adapter);
 
     }
 
@@ -102,13 +115,13 @@ public class MainActivity extends Activity {
                     Log.d("OUTPUT", name + " / " + empId);
 
                     // adding contact to contact list
-                    //contactList.add(contact);
+                    contactList.add(contact);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            Log.e("ServiceHandler", "Couldn't get any data from the url");
+            Log.e("ServiceHandler", "Nothing was fetched!");
         }
 
         return;
