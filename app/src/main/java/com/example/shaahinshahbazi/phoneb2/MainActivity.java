@@ -9,10 +9,13 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -63,8 +66,6 @@ public class MainActivity extends ListActivity {
         ListView lv = getListView();
         contactList = new ArrayList<HashMap<String, String>>();
 
-
-
         // https://dylansegna.wordpress.com/2013/09/19/using-http-requests-to-get-json-objects-in-android/
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -73,17 +74,17 @@ public class MainActivity extends ListActivity {
 
         parseJSON(readJSON);
 
-        /*
-        SimpleAdapter adapter = new SimpleAdapter(
-                MainActivity.this, contactList,
-                R.layout.list_item, new String[] { TAG_NAME,
-                TAG_MOBILEPHONE }, new int[] { R.id.name, R.id.mobile });
-
-        adapter.setViewImage(R.id.img, TAG_IMAGE );
-        setListAdapter(adapter);
-        */
-
         setListAdapter(new PhonelistAdapter(this, namesList, imagesList));
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(MainActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     public void parseJSON(String jstring) {
